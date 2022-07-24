@@ -26,26 +26,44 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [.blue, .black]), startPoint: .top, endPoint: .bottom)
+            RadialGradient(
+                stops: [
+                    .init(color: Color(red: 0.1, green: 0.2, blue: 0.45), location: 0.3),
+                    .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.3)
+                ],
+                center: .top, startRadius: 200, endRadius: 700)
                 .ignoresSafeArea()
             VStack {
-                Text("Tap the flag of")
-                    .font(.subheadline.weight(.heavy))
+                Text("Guess the Flag")
+                    .font(.largeTitle.weight(.bold))
                     .foregroundColor(.white)
-                Text(countries[correctAnswer])
-                    .font(.largeTitle.weight(.semibold))
-                    .foregroundColor(.white)
-                ForEach(0..<3) {number in
-                    Button {
-                        flagTapped(number)
-                    } label: {
-                        Image(countries[number])
-                            .renderingMode(.original)
-                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                            .shadow(radius: 5)
+                VStack(spacing: 20) {
+                    Text("Tap the flag of")
+                        .font(.subheadline.weight(.heavy))
+                        .foregroundColor(.white)
+                    Text(countries[correctAnswer])
+                        .font(.largeTitle.weight(.semibold))
+                        .foregroundColor(.white)
+                    ForEach(0..<3) {number in
+                        Button {
+                            flagTapped(number)
+                        } label: {
+                            Image(countries[number])
+                                .renderingMode(.original)
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                .shadow(radius: 5)
+                        }
                     }
                 }
+                .padding(.vertical, 20)
+                .padding(.horizontal, 50)
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                Text("Score: ")
+                    .foregroundColor(.white)
+                    .font(.title.bold())
             }
+            .padding()
         }
         .alert(scoreTitle, isPresented: $showingScore) {
             Button("Continue", action: askQuestion)
