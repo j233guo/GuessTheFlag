@@ -8,20 +8,37 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var showingAlert = false
     @State private var showingScore = false
     @State private var scoreTitle = ""
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
+    @State private var score = 0
+    @State private var round = 1
+    @State private var message = ""
+    @State private var buttonTitle = ""
     
     func flagTapped(_ number: Int) {
-        scoreTitle = number == correctAnswer ? "Correct" : "Wrong"
+        scoreTitle = number == correctAnswer ? "You are correct!" : "Sorry, that was wrong"
+        score += number == correctAnswer ? 1 : 0
+        if round == 10 {
+            message = "You have scored \(score) this game."
+            if score >= 9 { message += "\nNice job!" }
+            buttonTitle = "Start a New Game"
+        } else {
+            message = "Your score is now \(score)"
+            buttonTitle = "Next Round"
+        }
         showingScore = true
     }
     
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        if round >= 10 {
+            round = 1
+        } else {
+            round += 1
+        }
     }
     
     var body: some View {
@@ -59,16 +76,23 @@ struct ContentView: View {
                 .padding(.horizontal, 50)
                 .background(.ultraThinMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                Text("Score: ")
-                    .foregroundColor(.white)
-                    .font(.title.bold())
+                HStack {
+                    Text("Round: \(round)/10")
+                        .foregroundColor(.white)
+                        .font(.title.bold())
+                    Spacer()
+                    Text("Score: \(score)")
+                        .foregroundColor(.white)
+                        .font(.title.bold())
+                }
+                .padding()
             }
             .padding()
         }
         .alert(scoreTitle, isPresented: $showingScore) {
-            Button("Continue", action: askQuestion)
+            Button(buttonTitle, action: askQuestion)
         } message: {
-            Text("Your score is xxx")
+            Text(message)
         }
     }
 }
