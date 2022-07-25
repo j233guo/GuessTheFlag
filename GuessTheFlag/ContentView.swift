@@ -43,32 +43,17 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            RadialGradient(
-                stops: [
-                    .init(color: Color(red: 0.1, green: 0.2, blue: 0.45), location: 0.3),
-                    .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.3)
-                ],
-                center: .top, startRadius: 200, endRadius: 700)
-                .ignoresSafeArea()
+            Background()
             VStack {
-                Text("Guess the Flag")
-                    .font(.largeTitle.weight(.bold))
-                    .foregroundColor(.white)
+                LargeText(text: "Guess the Flag")
                 VStack(spacing: 20) {
-                    Text("Tap the flag of")
-                        .font(.subheadline.weight(.heavy))
-                        .foregroundColor(.white)
-                    Text(countries[correctAnswer])
-                        .font(.largeTitle.weight(.semibold))
-                        .foregroundColor(.white)
+                    SmallText(text: "Tap the flag of")
+                    LargeText(text: countries[correctAnswer])
                     ForEach(0..<3) {number in
                         Button {
                             flagTapped(number)
                         } label: {
-                            Image(countries[number])
-                                .renderingMode(.original)
-                                .clipShape(RoundedRectangle(cornerRadius: 15))
-                                .shadow(radius: 5)
+                            FlagImage(flagName: countries[number])
                         }
                     }
                 }
@@ -77,13 +62,9 @@ struct ContentView: View {
                 .background(.ultraThinMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 HStack {
-                    Text("Round: \(round)/10")
-                        .foregroundColor(.white)
-                        .font(.title.bold())
+                    MediumText(text: "Round: \(round)/10")
                     Spacer()
-                    Text("Score: \(score)")
-                        .foregroundColor(.white)
-                        .font(.title.bold())
+                    MediumText(text: "Score: \(score)")
                 }
                 .padding()
             }
